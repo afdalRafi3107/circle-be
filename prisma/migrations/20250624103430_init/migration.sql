@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE "Post" ALTER COLUMN "img" DROP NOT NULL;
+
+-- AlterTable
+ALTER TABLE "Profile" ALTER COLUMN "photoProfile" DROP NOT NULL,
+ALTER COLUMN "banner" DROP NOT NULL;

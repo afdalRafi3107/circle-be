@@ -15,8 +15,8 @@ export async function RegisterUser(req: Request, res: Response) {
         password: hashed,
         profile: {
           create: {
-            photoProfile: "./defaultIMG/defaultP.jpg",
-            banner: "./defaultIMG/defaultB.jpg",
+            photoProfile: null,
+            banner: null,
             bio: "",
           },
         },

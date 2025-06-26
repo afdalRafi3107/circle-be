@@ -8,6 +8,12 @@ export async function Thread(req: Request, res: Response) {
         createAt: "desc",
       },
       include: {
+        _count: {
+          select: {
+            reply: true,
+            like: true,
+          },
+        },
         author: {
           include: {
             profile: {

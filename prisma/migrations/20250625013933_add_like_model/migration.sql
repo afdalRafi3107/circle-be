@@ -1,0 +1,15 @@
+-- CreateTable
+CREATE TABLE "Like" (
+    "id" SERIAL NOT NULL,
+    "posId" INTEGER NOT NULL,
+    "authorID" INTEGER NOT NULL,
+    "createAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Like_pkey" PRIMARY KEY ("id")
+);
+
+-- AddForeignKey
+ALTER TABLE "Like" ADD CONSTRAINT "Like_posId_fkey" FOREIGN KEY ("posId") REFERENCES "Post"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Like" ADD CONSTRAINT "Like_authorID_fkey" FOREIGN KEY ("authorID") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

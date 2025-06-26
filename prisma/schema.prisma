@@ -21,22 +21,24 @@ model User{
   post Post[]
   profile Profile[]
   reply Reply[]
+  like Like[]
 }
 
 model Post{
   id Int @id @default(autoincrement())
   content String
   author User @relation(fields: [authorID], references: [id])
-  img String
+  img String?
   createAt DateTime @default(now())
   authorID Int
   reply Reply[]
+  like Like[]
 }
 model Profile{
   id Int @id @default(autoincrement())
   name String @default("User")
-  photoProfile String
-  banner String
+  photoProfile String?
+  banner String?
   bio String
   userProfile User @relation(fields: [userId], references: [id])
   userId Int
@@ -50,4 +52,15 @@ model Reply{
   author User @relation(fields: [authorId], references: [id])
   authorId Int
   createAt DateTime @default(now())
+  
+}
+
+model Like{
+  id Int @id @default(autoincrement())
+  post Post @relation(fields: [posId], references: [id])
+  posId Int
+  author User @relation(fields: [authorID], references: [id])
+  authorID Int
+  createAt DateTime @default(now())
+
 }
