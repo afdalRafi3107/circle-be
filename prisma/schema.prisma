@@ -22,6 +22,8 @@ model User{
   profile Profile[]
   reply Reply[]
   like Like[]
+  follow     Follow[] @relation("Follower")   // orang yang saya follow
+  followers  Follow[] @relation("Following")  // orang yang follow saya
 }
 
 model Post{
@@ -62,5 +64,14 @@ model Like{
   author User @relation(fields: [authorID], references: [id])
   authorID Int
   createAt DateTime @default(now())
+
+}
+
+model Follow{
+  id Int @id @default(autoincrement())
+  followerId Int?
+  followingId Int?  
+  follower     User?  @relation("Follower", fields: [followerId], references: [id])
+  following    User?  @relation("Following", fields: [followingId], references: [id]) // orang yang saya follow
 
 }

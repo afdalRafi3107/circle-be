@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Prisma } from "@prisma/client";
+
 import { prisma } from "../prisma/prisma";
 
 export async function Like(req: Request, res: Response) {
@@ -16,6 +16,7 @@ export async function Like(req: Request, res: Response) {
         authorID: userId,
       },
     });
+
     let liked;
 
     if (existinglike) {
