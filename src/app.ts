@@ -2,10 +2,8 @@ import express from "express";
 import router from "./routes/route";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import path from "path";
 
 export const app = express();
-app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 app.use(
   cors({
     origin: [
@@ -14,9 +12,8 @@ app.use(
     ],
   })
 );
+app.use(express.json());
+app.use(express.urlencoded());
 app.use(cookieParser());
 app.use(express.json());
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
 app.use("/api/v1", router);
