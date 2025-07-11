@@ -62,7 +62,7 @@ router.get("/user-profile/:id", UserById);
 router.get("/detail-thread/:id", authenticate, detailThread); //detailthread
 router.post("/detail-thread/reply/:id", authenticate, Replythread); //buat Reply
 router.delete("/delete-thread/:id", DeleteThread);
-router.patch("  ", uploadIMG.single("img"), EditThread);
+// router.patch("  ", uploadIMG.single("img"), EditThread);
 router.delete("/delete-reply/:id", deleteReplay);
 router.get("/all-reply/:id", AllReplay);
 router.post("/like/:id", authenticate, Like);
