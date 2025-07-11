@@ -6,7 +6,9 @@ import path from "path";
 
 const app = express();
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
-app.use(cors());
+app.use(cors({
+  origin: ["http://localhost:5173", "https://circle-git-main-muhammad-afdal-rafis-projects.vercel.app"]
+}));
 app.use(cookieParser());
 app.use(express.json());
 app.get('/', (req, res) => {
