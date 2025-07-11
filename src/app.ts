@@ -7,7 +7,7 @@ app.use(express.json());
 const PORT = process.env.PORT;
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://circle-umber.vercel.app/"],
+    origin: ["http://localhost:5173", "https://circle-umber.vercel.app"],
   })
 );
 app.get("/", (req, res) => {
