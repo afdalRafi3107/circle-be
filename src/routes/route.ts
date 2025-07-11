@@ -1,8 +1,6 @@
 import express from "express";
-import { Router } from "express";
 import { login, Post } from "../controllers/login";
 import { authenticate } from "../middleware/authMidddleWare";
-import { GetUSer } from "../controllers/fetchUser";
 import { RegisterUser } from "../controllers/RegisterUser";
 import { userProfile } from "../controllers/user";
 import { Thread } from "../controllers/GetThread";
@@ -28,8 +26,8 @@ import {
 } from "../controllers/follow";
 import { Search } from "../controllers/Search";
 import { getPostAnotherUSers } from "../controllers/getProfile/anotherUsers/postAnotherUsers";
-import { editProfile } from "../controllers/editUser/editUser";
 import { getMediaByUserProfile } from "../controllers/getProfile/anotherUsers/mediaAnotherUser";
+import { editProfile } from "../controllers/editUser/editUser";
 
 const router = express.Router();
 

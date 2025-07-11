@@ -1,6 +1,4 @@
 import multer from "multer";
-import { v2 as cloudinary } from "cloudinary";
-import { CloudinaryStorage } from "multer-storage-cloudinary";
 import path from "path";
 
 // Konfigurasi penyimpanan
@@ -17,25 +15,20 @@ import path from "path";
 //   },
 // });
 
-cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.API_KEY,
-  api_secret: process.env.API_SECRET,
-});
+const storage = multer.memoryStorage();
 
-const storage = new CloudinaryStorage({
-  cloudinary,
-  params: (req, file) => {
-    console.log("req file : ", req.file);
-    console.log("file upload :", file.filename);
-
-    return {
-      folder: "image",
-      allowed_formats: ["jpg", "png", "jpeg", "webp"],
-    };
-    // transformation: [{ width: 800, height: 800, crop: "limit" }],
+// Inisialisasi middleware upload
+export const uploadIMG = multer({
+  storage,
+  fileFilter: (_req, file, cb) => {
+    const ext = path.extname(file.originalname).toLowerCase();
+    if ([".jpg", ".jpeg", ".png", ".webp"].includes(ext)) {
+      cb(null, true);
+    } else {
+      cb(new Error("Only images are allowed"));
+    }
   },
 });
 
 // Inisialisasi middleware upload
-export const uploadIMG = multer({ storage });
+// export const uploadIMG = multer({ storage });

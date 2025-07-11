@@ -2,16 +2,24 @@ import { prisma } from "../prisma/prisma";
 import { Request, Response } from "express";
 import fs from "fs";
 import path from "path";
+import { uploadToCloudinary } from "../ultils/cloudinary";
 
 export async function createThread(req: Request, res: Response) {
   const userId = (req as any).user;
   const loggedID = userId.id;
-  const img = req.file?.path || null;
+  const img = req.file || null;
   const { content } = req.body;
-  console.log(process.env.CLOUD_NAME);
-  console.log(process.env.API_KEY);
-  console.log(process.env.API_SECRET);
-  console.log("req.file : ", req.file);
+  let imgUrl = null;
+  if (img) {
+    const uploadResult = await uploadToCloudinary(img.buffer, {
+      folder: "photoProfile",
+    });
+    imgUrl = uploadResult.url;
+  }
+  // console.log(process.env.CLOUD_NAME);
+  // console.log(process.env.API_KEY);
+  // console.log(process.env.API_SECRET);
+  // console.log("req.file : ", req.file);
 
   try {
     if (!loggedID) {
@@ -21,7 +29,7 @@ export async function createThread(req: Request, res: Response) {
     const createThread = await prisma.post.create({
       data: {
         content,
-        img,
+        img: imgUrl,
         authorID: loggedID,
       },
     });

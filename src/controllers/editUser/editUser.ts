@@ -1,14 +1,11 @@
-import { log, profile } from "console";
 import { prisma } from "../../prisma/prisma";
 import { Request, Response } from "express";
-import path from "path";
-import fs from "fs";
+import { uploadToCloudinary } from "../../ultils/cloudinary";
 
-export async function editProfile(req: Request, res: Response) {
+async function editProfile(req: Request, res: Response) {
   try {
     const userId = (req as any).user.id;
-
-    const { name, username, bio } = req.body;
+    const { name, username, bio, photoProfile, banner } = req.body;
     const files = req.files as { [fieldname: string]: Express.Multer.File[] };
 
     const photoFile = files?.photoProfile?.[0];
@@ -21,23 +18,32 @@ export async function editProfile(req: Request, res: Response) {
       },
     });
 
-    if (!user) {
+    if (!user || !user.profile[0]) {
       res.status(404).json({ message: "User tidak ditemukan" });
       return;
     }
 
-    // Hapus file lama jika user ingin hapus
-    const newPhoto = photoFile
-      ? `${photoFile.path}`
-      : req.body.photoProfile === "" // user ingin hapus gambar
-      ? null
-      : user.profile[0].photoProfile;
+    // Upload photoProfile baru jika ada
+    let newPhoto = user.profile[0].photoProfile;
+    if (photoFile) {
+      const uploadResult = await uploadToCloudinary(photoFile.buffer, {
+        folder: "photoProfile",
+      });
+      newPhoto = uploadResult.url;
+    } else if (photoProfile === "") {
+      newPhoto = null; // user ingin menghapus
+    }
 
-    const newBanner = bannerFile
-      ? `${bannerFile.path}`
-      : req.body.banner === ""
-      ? null
-      : user.profile[0].banner;
+    // Upload banner baru jika ada
+    let newBanner = user.profile[0].banner;
+    if (bannerFile) {
+      const uploadResult = await uploadToCloudinary(bannerFile.buffer, {
+        folder: "banner",
+      });
+      newBanner = uploadResult.url;
+    } else if (banner === "") {
+      newBanner = null; // user ingin menghapus
+    }
 
     // Update user dan profile
     await prisma.user.update({
@@ -46,9 +52,10 @@ export async function editProfile(req: Request, res: Response) {
         username,
       },
     });
+
     await prisma.profile.update({
       where: {
-        userId: userId,
+        userId,
       },
       data: {
         name,
@@ -58,32 +65,11 @@ export async function editProfile(req: Request, res: Response) {
       },
     });
 
-    // const { name, username, bio } = req.body;
-    // const photoProfile = req.file?.filename;
-    // const banner = req.file?.filename;
-
-    // const data: any = {};
-    // if (banner !== undefined) data.banner = banner;
-    // if (photoProfile !== undefined) data.photoProfile = photoProfile;
-    // if (bio !== undefined) data.bio = bio;
-    // if (name !== undefined) data.name = name;
-
-    // await prisma.user.update({
-    //   where: { id: userId },
-    //   data: {
-    //     username: username,
-    //   },
-    // });
-    // await prisma.profile.update({
-    //   where: {
-    //     userId: userId,
-    //   },
-    //   data,
-    // });
-
     res.json({ message: "Profil berhasil diupdate" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Gagal mengupdate profil" });
   }
 }
+
+export { editProfile };
