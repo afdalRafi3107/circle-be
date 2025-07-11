@@ -39,14 +39,6 @@ export async function editProfile(req: Request, res: Response) {
       ? null
       : user.profile[0].banner;
 
-    // Optional: Hapus file lama dari disk
-    if (req.body.photoProfile === "" && user.profile[0].photoProfile) {
-      fs.unlink(path.join("public", user.profile[0].photoProfile), () => {});
-    }
-    if (req.body.banner === "" && user.profile[0].banner) {
-      fs.unlink(path.join("public", user.profile[0].banner), () => {});
-    }
-
     // Update user dan profile
     await prisma.user.update({
       where: { id: userId },
