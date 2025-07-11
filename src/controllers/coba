@@ -1,0 +1,46 @@
+// export const searchUser = async (req: Request, res: Response) => {
+//   const query = req.query.q as string;
+//   const loggedInUserId = (req as any).user?.id; 
+//   if (!loggedInUserId) {
+//     res.status(401).json({ message: "Unauthorized: User not found" });
+//     return;
+//   }
+
+//   if (!query) res.status(400).json({ message: "Missing search query" });
+
+//   const users = await prisma.user.findMany({
+//     where: {
+//       AND: [
+//         { id: { not: loggedInUserId } }, 
+//         {
+//           OR: [
+//             { profile: { name: { contains: query, mode: "insensitive" } } },
+//             { profile: { username: { contains: query, mode: "insensitive" } } },
+//           ],
+//         },
+//       ],
+//     },
+//     select: {
+//       id: true,
+//       email: true,
+//       profile: {
+//         select: {
+//           userId: true,
+//           username: true,
+//           name: true,
+//           bio: true,
+//           avatarUrl: true,
+//           interests: true,
+//         },
+//       },
+//       followers: {
+//         where: { followerId: loggedInUserId },
+//         select: { id: true }, // jika ada, artinya sudah di-follow
+//       },
+//     },
+//   });
+
+//   const result = users.map((user) => ({
+//     ...user,
+//     isFollowed: user.followers.length > 0,
+//   }));

@@ -13,11 +13,18 @@ export async function getPostUser(req: Request, res: Response) {
         authorID: loggedID,
       },
       include: {
+        _count: {
+          select: {
+            like: true,
+          },
+        },
         author: {
-          include: {
+          select: {
+            username: true,
             profile: {
               select: {
                 name: true,
+                photoProfile: true,
               },
             },
           },

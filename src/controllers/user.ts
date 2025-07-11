@@ -23,6 +23,12 @@ export async function userProfile(req: Request, res: Response) {
             name: true,
           },
         },
+        _count: {
+          select: {
+            follow: true,
+            followers: true,
+          },
+        },
       },
     });
     res.json(user);

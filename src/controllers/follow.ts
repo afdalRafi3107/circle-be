@@ -126,6 +126,7 @@ export async function following(req: Request, res: Response) {
             followerId: true,
             following: {
               select: {
+                id: true,
                 username: true,
                 profile: {
                   select: {

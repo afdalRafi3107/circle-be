@@ -12,6 +12,11 @@ export async function AllReplay(req: Request, res: Response) {
         id: "desc",
       },
       include: {
+        _count: {
+          select: {
+            likeReply: true,
+          },
+        },
         author: {
           omit: {
             password: true,
@@ -24,4 +29,20 @@ export async function AllReplay(req: Request, res: Response) {
     });
     res.json(replys);
   } catch (error) {}
+}
+
+export async function deleteReplay(req: Request, res: Response) {
+  const idreply = parseInt(req.params.id);
+
+  try {
+    const DeleteReplay = await prisma.reply.delete({
+      where: {
+        id: idreply,
+      },
+    });
+
+    res.json(DeleteReplay);
+  } catch (error) {
+    res.json(error);
+  }
 }
