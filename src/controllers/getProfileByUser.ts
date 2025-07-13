@@ -10,6 +10,12 @@ export async function UserById(req: Request, res: Response) {
         id,
       },
       include: {
+        _count: {
+          select: {
+            follow: true,
+            followers: true,
+          },
+        },
         profile: true,
       },
     });
